@@ -5,14 +5,17 @@
   <script>
     var left = false
     var HISTORY_NAME = 'a record'
+    var count 
     if (!history.state) {
+      count = 1
       history.replaceState({
-        count: 1
+        count: count
       }, HISTORY_NAME)
     } 
     else {
+      count = history.state.count + 1
       history.replaceState({
-        count: history.state.count + 1
+        count: count
       }, HISTORY_NAME)
     }
     
@@ -20,15 +23,25 @@
       if (msg.data !== 'backed') {
         return
       }
-      alert('user clicked go back, count: ')
-      window.location.href = document.referrer
-      return;
+      alert('user clicked go back, count: ' + (history.state?history.state.count:null))
       history.go(history.state.count * -1)
     })
     var iframe = document.createElement('iframe')
     iframe.style='display: none'
     iframe.src='./initFrame.htm'
     document.body.appendChild(iframe)
+
+    window.addEventListener('popstate', (event) => {
+      // for safari, for some reason it fires popstate when back button clicked
+      if (
+        // https://bugs.webkit.org/show_bug.cgi?id=70876
+        !history.state &&
+        event.state.count == count
+      ) {
+        window.postMessage('backed', location.origin)
+      }
+      console.log("location: " + document.location + ", state: " + JSON.stringify(event.state));
+    });
   </script>
 </body>
 </html>
