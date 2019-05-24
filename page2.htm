@@ -3,12 +3,23 @@
   Click backward button on navigation bar
   <a href="https://www.google.com">test link to google</a>
   <script>
+    var HISTORY_NAME = 'a record'
+    if (!history.state) {
+      history.replaceState({
+        count: 1
+      }, HISTORY_NAME)
+    } else {
+      history.replaceState({
+        count: history.state.count + 1
+      }, HISTORY_NAME)
+    }
+    
     window.addEventListener('message', (msg) => {
       if (msg.data !== 'backed') {
         return
       }
-      alert('user clicked go back')
-      window.location.href = document.referrer
+      alert('user clicked go back, count: ' + history.state.count)
+      history.go(history.state.count * -1)
     })
     var iframe = document.createElement('iframe')
     iframe.style='display: none'
