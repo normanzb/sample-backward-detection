@@ -1,0 +1,19 @@
+<html>
+<body>
+  Click backward button on navigation bar
+  <a href="https://www.google.com">test link to google</a>
+  <script>
+    window.addEventListener('message', (msg) => {
+      if (msg.data !== 'backed') {
+        return
+      }
+      alert('user clicked go back')
+      window.location.href = document.referrer
+    })
+    var iframe = document.createElement('iframe')
+    iframe.style='display: none'
+    iframe.src='./initFrame.htm'
+    document.body.appendChild(iframe)
+  </script>
+</body>
+</html>

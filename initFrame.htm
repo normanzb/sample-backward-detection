@@ -1,0 +1,24 @@
+<html>
+<body>
+  <script>
+    function main() {
+      console.log(location.href, window.name)
+      switch(window.name) {
+      case 'backed':
+        if (!window.parent) {
+          break
+        }
+        
+        window.parent.postMessage('backed', location.origin)
+      default:
+        window.name = 'backed';
+        setTimeout(function(){
+          window.location.href = './jumpedFrame.htm'
+        })
+        break
+      }
+    }
+    main()
+  </script>
+</body>
+</html>
